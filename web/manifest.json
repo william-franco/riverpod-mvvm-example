@@ -1,6 +1,6 @@
 {
-    "name": "counter_riverpod",
-    "short_name": "counter_riverpod",
+    "name": "riverpod_mvvm_example",
+    "short_name": "riverpod_mvvm_example",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
