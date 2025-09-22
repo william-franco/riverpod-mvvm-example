@@ -3,6 +3,36 @@
 Under construction.
 
 
+## Directory tree
+
+```
+lib/
+    └── src/
+        ├── common/
+        │   ├── constants/
+        │   ├── dependency_injectors/
+        │   ├── extensions/
+        │   ├── results/
+        │   ├── routes/
+        │   ├── services/
+        │   ├── states/
+        │   └── widgets/
+        └── features/
+            ├── settings/
+            │   ├── models/
+            │   ├── repositories/
+            │   ├── routes/
+            │   ├── view_models/
+            │   └── views/
+            └── users/
+                ├── models/
+                ├── repositories/
+                ├── routes/
+                ├── view_models/
+                └── views/
+```
+
+
 ## Coverage
 
 flutter pub run build_runner build --delete-conflicting-outputs
