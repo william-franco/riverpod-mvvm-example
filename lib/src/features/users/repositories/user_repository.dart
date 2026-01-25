@@ -1,5 +1,5 @@
 import 'package:riverpod_mvvm_example/src/common/constants/api_constant.dart';
-import 'package:riverpod_mvvm_example/src/common/results/result.dart';
+import 'package:riverpod_mvvm_example/src/common/patterns/result_pattern.dart';
 import 'package:riverpod_mvvm_example/src/common/services/connection_service.dart';
 import 'package:riverpod_mvvm_example/src/common/services/http_service.dart';
 import 'package:riverpod_mvvm_example/src/features/users/models/user_model.dart';

@@ -34,8 +34,8 @@ class SettingViewModelImpl extends _ViewModel implements SettingViewModel {
     _emit(model);
   }
 
-  void _emit(SettingModel newValue) {
-    _settingModel = newValue;
+  void _emit(SettingModel newState) {
+    _settingModel = newState;
     notifyListeners();
     debugPrint('SettingController: ${settingModel.isDarkTheme}');
   }

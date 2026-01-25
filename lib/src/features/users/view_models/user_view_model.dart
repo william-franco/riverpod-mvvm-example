@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:riverpod_mvvm_example/src/common/states/state.dart';
+import 'package:riverpod_mvvm_example/src/common/patterns/app_state_pattern.dart';
 import 'package:riverpod_mvvm_example/src/features/users/models/user_model.dart';
 import 'package:riverpod_mvvm_example/src/features/users/repositories/user_repository.dart';
 
@@ -37,9 +37,9 @@ class UserViewModelImpl extends _ViewModel implements UserViewModel {
     _emit(state);
   }
 
-  void _emit(UsersState newValue) {
-    if (_userState != newValue) {
-      _userState = newValue;
+  void _emit(UsersState newState) {
+    if (_userState != newState) {
+      _userState = newState;
       notifyListeners();
       debugPrint('User state: $_userState');
     }
