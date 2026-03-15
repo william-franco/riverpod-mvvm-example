@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_mvvm_example/src/common/dependency_injectors/dependency_injector.dart';
 import 'package:riverpod_mvvm_example/src/common/routes/routes.dart';
+import 'package:riverpod_mvvm_example/src/common/state_management/state_management.dart';
+import 'package:riverpod_mvvm_example/src/features/settings/models/setting_model.dart';
+import 'package:riverpod_mvvm_example/src/features/settings/view_models/setting_view_model.dart';
 
 void main() {
   final Routes appRoutes = Routes();
@@ -17,15 +20,15 @@ class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final settingViewModel = ref.watch(settingViewModelProv);
-    return ListenableBuilder(
-      listenable: settingViewModel,
-      builder: (context, child) {
+    return StateBuilderWidget<SettingViewModel, SettingModel>(
+      viewModel: settingViewModel,
+      builder: (context, settingModel) {
         return MaterialApp.router(
           title: 'Riverpod MVVM Example',
           debugShowCheckedModeBanner: false,
           theme: ThemeData.light(useMaterial3: true),
           darkTheme: ThemeData.dark(useMaterial3: true),
-          themeMode: settingViewModel.settingModel.isDarkTheme
+          themeMode: settingModel.isDarkTheme
               ? ThemeMode.dark
               : ThemeMode.light,
           routerConfig: appRoutes.routes,
