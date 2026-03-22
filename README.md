@@ -3,33 +3,32 @@
 Under construction.
 
 
-## Directory tree
+## Folder architecture
 
 ```
-lib/
-    └── src/
-        ├── common/
-        │   ├── constants/
-        │   ├── dependency_injectors/
-        │   ├── extensions/
-        │   ├── results/
+src/
+    ├── common/
+    │   ├── constants/
+    │   ├── dependency_injectors/
+    │   ├── extensions/
+    │   ├── results/
+    │   ├── routes/
+    │   ├── services/
+    │   ├── states/
+    │   └── widgets/
+    └── features/
+        ├── feature_one/
+        │   ├── models/
+        │   ├── repositories/
         │   ├── routes/
-        │   ├── services/
-        │   ├── states/
-        │   └── widgets/
-        └── features/
-            ├── settings/
-            │   ├── models/
-            │   ├── repositories/
-            │   ├── routes/
-            │   ├── view_models/
-            │   └── views/
-            └── users/
-                ├── models/
-                ├── repositories/
-                ├── routes/
-                ├── view_models/
-                └── views/
+        │   ├── view_models/
+        │   └── views/
+        └── feature_two/
+            ├── models/
+            ├── repositories/
+            ├── routes/
+            ├── view_models/
+            └── views/
 ```
 
 
