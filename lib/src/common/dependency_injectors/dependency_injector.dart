@@ -9,50 +9,58 @@ import 'package:riverpod_mvvm_example/src/features/users/repositories/user_repos
 import 'package:riverpod_mvvm_example/src/features/users/view_models/user_view_model.dart';
 
 // Services
-final connectionService = Provider<ConnectionService>((ref) {
-  final service = ConnectionServiceImpl();
-  Future.microtask(() async {
-    await service.checkConnection();
-  });
-  return service;
+final connectionServiceProvider = Provider<ConnectionService>((ref) {
+  return ConnectionServiceImpl();
 });
 
-final httpService = Provider<HttpService>((ref) {
+final httpServiceProvider = Provider<HttpService>((ref) {
   return HttpServiceImpl();
 });
 
-final storageService = Provider<StorageService>((ref) {
-  final service = StorageServiceImpl();
-  Future.microtask(() async {
-    await service.initStorage();
-  });
-  return service;
+final storageServiceProvider = Provider<StorageService>((ref) {
+  return StorageServiceImpl();
 });
 
 // Repositories
-final settingRepository = Provider.autoDispose<SettingRepository>((ref) {
-  return SettingRepositoryImpl(storageService: ref.watch(storageService));
+final settingRepositoryProvider = Provider.autoDispose<SettingRepository>((
+  ref,
+) {
+  final storageService = ref.watch(storageServiceProvider);
+  return SettingRepositoryImpl(storageService: storageService);
 });
 
-final userRepository = Provider.autoDispose<UserRepository>((ref) {
+final userRepositoryProvider = Provider.autoDispose<UserRepository>((ref) {
+  final connectionService = ref.watch(connectionServiceProvider);
+  final httpService = ref.watch(httpServiceProvider);
   return UserRepositoryImpl(
-    connectionService: ref.watch(connectionService),
-    httpService: ref.watch(httpService),
+    connectionService: connectionService,
+    httpService: httpService,
   );
 });
 
 // ViewModels
-final settingViewModelProv = ChangeNotifierProvider<SettingViewModel>((ref) {
-  final viewModel = SettingViewModelImpl(
-    settingRepository: ref.watch(settingRepository),
-  );
-  Future.microtask(() async {
-    await Future.delayed(Duration.zero);
-    await viewModel.getTheme();
-  });
-  return viewModel;
+final settingViewModelProvider = ChangeNotifierProvider<SettingViewModel>((
+  ref,
+) {
+  final settingRepository = ref.watch(settingRepositoryProvider);
+  return SettingViewModelImpl(settingRepository: settingRepository);
 });
 
-final userViewModelProv = ChangeNotifierProvider<UserViewModel>((ref) {
-  return UserViewModelImpl(userRepository: ref.watch(userRepository));
+final userViewModelProvider = ChangeNotifierProvider<UserViewModel>((ref) {
+  final userRepository = ref.watch(userRepositoryProvider);
+  return UserViewModelImpl(userRepository: userRepository);
+});
+
+/// Init dependencies asynchronously.
+final appBootstrapProvider = FutureProvider<void>((ref) async {
+  final storageService = ref.read(storageServiceProvider);
+  final connectionService = ref.read(connectionServiceProvider);
+  final settingViewModel = ref.read(settingViewModelProvider);
+
+  await Future.wait([
+    storageService.initStorage(),
+    connectionService.checkConnection(),
+  ]);
+
+  await settingViewModel.getTheme();
 });

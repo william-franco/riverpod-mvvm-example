@@ -4,20 +4,21 @@ import 'package:riverpod_mvvm_example/src/common/state_management/state_manageme
 import 'package:riverpod_mvvm_example/src/features/users/models/user_model.dart';
 import 'package:riverpod_mvvm_example/src/features/users/repositories/user_repository.dart';
 
-typedef _ViewModel = StateManagement<UsersState>;
-
 typedef UsersState = AppState<List<UserModel>>;
 
-abstract interface class UserViewModel extends _ViewModel {
-  UserViewModel(super.initialState);
+typedef _ViewModel = StateManagement<UsersState>;
 
+abstract interface class UserViewModel extends _ViewModel {
   Future<void> getAllUsers();
 }
 
 class UserViewModelImpl extends _ViewModel implements UserViewModel {
   final UserRepository userRepository;
 
-  UserViewModelImpl({required this.userRepository}) : super(InitialState());
+  UserViewModelImpl({required this.userRepository});
+
+  @override
+  UsersState build() => const InitialState();
 
   @override
   Future<void> getAllUsers() async {
