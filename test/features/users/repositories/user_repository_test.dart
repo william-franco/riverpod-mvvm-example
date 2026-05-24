@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:riverpod_mvvm_example/src/common/patterns/result_pattern.dart';
+import 'package:riverpod_mvvm_example/src/features/users/exceptions/user_exception.dart';
 import 'package:riverpod_mvvm_example/src/features/users/models/user_model.dart';
 import 'package:riverpod_mvvm_example/src/features/users/repositories/user_repository.dart';
 
@@ -70,9 +71,9 @@ void main() {
         final result = await repository.findAllUsers();
 
         // assert
-        expect(result, isA<SuccessResult<List<UserModel>, Exception>>());
+        expect(result, isA<SuccessResult<List<UserModel>, UserException>>());
         final users =
-            (result as SuccessResult<List<UserModel>, Exception>).value;
+            (result as SuccessResult<List<UserModel>, UserException>).value;
         expect(users.length, equals(tUsers.length));
         expect(users.first.id, equals(tUsers.first.id));
         expect(users.first.name, equals(tUsers.first.name));
@@ -96,9 +97,10 @@ void main() {
         final result = await repository.findAllUsers();
 
         // assert
-        expect(result, isA<ErrorResult<List<UserModel>, Exception>>());
-        final error = (result as ErrorResult<List<UserModel>, Exception>).error;
-        expect(error.toString(), contains('Device not connected.'));
+        expect(result, isA<ErrorResult<List<UserModel>, UserException>>());
+        final error =
+            (result as ErrorResult<List<UserModel>, UserException>).error;
+        expect(error.message, contains('Device not connected.'));
         verifyNever(mockHttpService.getData(path: anyNamed('path')));
       });
 
@@ -123,10 +125,10 @@ void main() {
           final result = await repository.findAllUsers();
 
           // assert
-          expect(result, isA<ErrorResult<List<UserModel>, Exception>>());
+          expect(result, isA<ErrorResult<List<UserModel>, UserException>>());
           final error =
-              (result as ErrorResult<List<UserModel>, Exception>).error;
-          expect(error.toString(), contains('Failed to fetch users: 500'));
+              (result as ErrorResult<List<UserModel>, UserException>).error;
+          expect(error.message, contains('Failed to fetch users: 500'));
         },
       );
 
@@ -150,7 +152,7 @@ void main() {
           final result = await repository.findAllUsers();
 
           // assert
-          expect(result, isA<ErrorResult<List<UserModel>, Exception>>());
+          expect(result, isA<ErrorResult<List<UserModel>, UserException>>());
         },
       );
 
@@ -170,10 +172,10 @@ void main() {
           final result = await repository.findAllUsers();
 
           // assert
-          expect(result, isA<ErrorResult<List<UserModel>, Exception>>());
+          expect(result, isA<ErrorResult<List<UserModel>, UserException>>());
           final error =
-              (result as ErrorResult<List<UserModel>, Exception>).error;
-          expect(error.toString(), contains('Unexpected error'));
+              (result as ErrorResult<List<UserModel>, UserException>).error;
+          expect(error.message, contains('Unexpected error'));
         },
       );
 

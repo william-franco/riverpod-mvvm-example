@@ -2,9 +2,10 @@ import 'package:riverpod_mvvm_example/src/common/constants/api_constant.dart';
 import 'package:riverpod_mvvm_example/src/common/patterns/result_pattern.dart';
 import 'package:riverpod_mvvm_example/src/common/services/connection_service.dart';
 import 'package:riverpod_mvvm_example/src/common/services/http_service.dart';
+import 'package:riverpod_mvvm_example/src/features/users/exceptions/user_exception.dart';
 import 'package:riverpod_mvvm_example/src/features/users/models/user_model.dart';
 
-typedef UserResult = Result<List<UserModel>, Exception>;
+typedef UserResult = Result<List<UserModel>, UserException>;
 
 abstract interface class UserRepository {
   Future<UserResult> findAllUsers();
@@ -25,7 +26,7 @@ class UserRepositoryImpl implements UserRepository {
       await connectionService.checkConnection();
 
       if (!connectionService.isConnected) {
-        return ErrorResult(error: Exception('Device not connected.'));
+        return ErrorResult(error: UserException('Device not connected.'));
       }
 
       final result = await httpService.getData(path: ApiConstant.users);
@@ -39,10 +40,10 @@ class UserRepositoryImpl implements UserRepository {
       }
 
       return ErrorResult(
-        error: Exception('Failed to fetch users: ${result.statusCode}'),
+        error: UserException('Failed to fetch users: ${result.statusCode}'),
       );
     } catch (error) {
-      return ErrorResult(error: Exception('Unexpected error: $error'));
+      return ErrorResult(error: UserException('Unexpected error: $error'));
     }
   }
 }
