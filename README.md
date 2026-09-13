@@ -1,12 +1,39 @@
 # Riverpod MVVM Example
 
-MVVM pattern example using Riverpod.
+Same MVVM layout as the Provider example, but dependencies and state are exposed via Riverpod.
+
+View models are provided through providers; widgets rebuild when async state changes.
+
+Features remain modular with repositories talking to HTTP and local storage services.
+
+Useful for comparing Provider vs Riverpod ergonomics on an identical feature set.
+
+## Structure
+
+```mermaid
+flowchart TB
+  Routes --> UserRoute
+  Routes --> SettingRoute
+  subgraph usersFeature [users]
+    UserRoute --> UserView
+    UserView --> RiverpodRef
+    RiverpodRef --> UserViewModel
+    UserViewModel --> UserRepository
+    UserRepository --> HttpService
+  end
+  HttpService --> JsonPlaceholder[JSONPlaceholder API]
+  subgraph settingsFeature [settings]
+    SettingRoute --> SettingViewModel
+    SettingViewModel --> SettingRepository
+    SettingRepository --> SharedPreferences
+  end
+```
 
 ## Stack
 
 | Technology | Version |
 |------------|---------|
-| Dart SDK | ^3.13.2 |
+| Dart SDK | ^3.13.3 |
 | connectivity_plus | ^7.0.0 |
 | cupertino_icons | ^1.0.8 |
 | dio | ^5.9.2 |
@@ -26,46 +53,33 @@ MVVM pattern example using Riverpod.
 
 ## Architecture
 
+The project is structured in a modular way, where each new functionality should be a new module containing its particularities, and things common to the entire project should be in the `common` module.
+
 ```
-lib/
-    └── src/
-        ├── common/
-        │   ├── constants/
-        │   ├── dependency_injectors/
-        │   ├── enums/
-        │   ├── extensions/
-        │   ├── patterns/
+src/
+    ├── common/
+    │   ├── constants/
+    │   ├── dependency_injectors/
+    │   ├── enums/
+    │   ├── extensions/
+    │   ├── patterns/
+    │   ├── routes/
+    │   ├── services/
+    │   ├── state_management/
+    │   └── widgets/
+    └── features/
+        ├── feature_one/
+        │   ├── models/
+        │   ├── repositories/
         │   ├── routes/
-        │   ├── services/
-        │   ├── state_management/
-        │   └── widgets/
-        └── features/
-            ├── feature_one/
-            │   ├── data/
-            │   │   ├── data_sources/
-            │   │   ├── models/
-            │   │   └── repositories/
-            │   ├── domain/
-            │   │   ├── entities/
-            │   │   ├── repositories/
-            │   │   └── usecases/
-            │   └── presentation/
-            │       ├── routes/
-            │       ├── view_models/
-            │       └── views/
-            └── feature_two/
-                ├── data/
-                │   ├── data_sources/
-                │   ├── models/
-                │   └── repositories/
-                ├── domain/
-                │   ├── entities/
-                │   ├── repositories/
-                │   └── usecases/
-                └── presentation/
-                    ├── routes/
-                    ├── view_models/
-                    └── views/
+        │   ├── view_models/
+        │   └── views/
+        └── feature_two/
+            ├── models/
+            ├── repositories/
+            ├── routes/
+            ├── view_models/
+            └── views/
 ```
 
 ## Coverage
