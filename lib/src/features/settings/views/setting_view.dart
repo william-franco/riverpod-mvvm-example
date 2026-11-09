@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_mvvm_example/src/common/state_management/state_management.dart';
 import 'package:riverpod_mvvm_example/src/features/settings/models/setting_model.dart';
@@ -23,9 +22,8 @@ class SettingView extends StatelessWidget {
           icon: const Icon(Icons.code),
           label: const Text('GitHub'),
           onPressed: () {
-            launchUrl(
-              Uri.parse('https://github.com/william-franco'),
-              mode: LaunchMode.externalApplication,
+            settingViewModel.openUrl(
+              url: Uri.parse('https://github.com/william-franco'),
             );
           },
         ),

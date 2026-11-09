@@ -15,7 +15,9 @@ void main() {
     late UserViewModel viewModel;
 
     // Dummy values required by mockito for sealed/generic return types
-    final dummySuccess = SuccessResult<List<UserModel>, UserException>(value: []);
+    final dummySuccess = SuccessResult<List<UserModel>, UserException>(
+      value: [],
+    );
     final dummyError = ErrorResult<List<UserModel>, UserException>(
       error: UserException('dummy'),
     );
@@ -80,9 +82,8 @@ void main() {
       test('should emit [LoadingState, SuccessState] '
           'when repository returns SuccessResult', () async {
         // arrange
-        when(
-          mockUserRepository.findAllUsers(),
-        ).thenAnswer((_) async => SuccessResult(value: tUsers));
+        when(mockUserRepository.findAllUsers())
+            .thenAnswer((_) async => SuccessResult(value: tUsers));
 
         final emittedStates = <UsersState>[];
         viewModel.addListener(() => emittedStates.add(viewModel.state));
@@ -140,10 +141,7 @@ void main() {
 
         final errorState =
             emittedStates[1] as ErrorState<List<UserModel>, UserException>;
-        expect(
-          errorState.error.message,
-          contains('Device not connected.'),
-        );
+        expect(errorState.error.message, contains('Device not connected.'));
       });
 
       // -------------------------------------------------------------------------
@@ -153,9 +151,8 @@ void main() {
       test('should emit SuccessState with empty list '
           'when repository returns an empty SuccessResult', () async {
         // arrange
-        when(
-          mockUserRepository.findAllUsers(),
-        ).thenAnswer((_) async => SuccessResult(value: <UserModel>[]));
+        when(mockUserRepository.findAllUsers())
+            .thenAnswer((_) async => SuccessResult(value: <UserModel>[]));
 
         final emittedStates = <UsersState>[];
         viewModel.addListener(() => emittedStates.add(viewModel.state));
@@ -181,9 +178,8 @@ void main() {
         'should notify listeners twice (LoadingState then final state)',
         () async {
           // arrange
-          when(
-            mockUserRepository.findAllUsers(),
-          ).thenAnswer((_) async => SuccessResult(value: tUsers));
+          when(mockUserRepository.findAllUsers())
+              .thenAnswer((_) async => SuccessResult(value: tUsers));
 
           int notifyCount = 0;
           viewModel.addListener(() => notifyCount++);
@@ -231,9 +227,8 @@ void main() {
         'should reset to LoadingState on each new getAllUsers call',
         () async {
           // arrange
-          when(
-            mockUserRepository.findAllUsers(),
-          ).thenAnswer((_) async => SuccessResult(value: tUsers));
+          when(mockUserRepository.findAllUsers())
+              .thenAnswer((_) async => SuccessResult(value: tUsers));
 
           // act — first call
           await viewModel.getAllUsers();

@@ -8,11 +8,16 @@ import '../setting_mocks.mocks.dart';
 void main() {
   group('SettingRepository Test', () {
     late MockStorageService mockStorageService;
+    late MockUrlLauncherService mockUrlLauncherService;
     late SettingRepository repository;
 
     setUp(() {
       mockStorageService = MockStorageService();
-      repository = SettingRepositoryImpl(storageService: mockStorageService);
+      mockUrlLauncherService = MockUrlLauncherService();
+      repository = SettingRepositoryImpl(
+        storageService: mockStorageService,
+        urlLauncherService: mockUrlLauncherService,
+      );
     });
 
     // ---------------------------------------------------------------------------
@@ -23,9 +28,8 @@ void main() {
       test('should return SettingModel with isDarkTheme true '
           'when storage returns true', () async {
         // arrange
-        when(
-          mockStorageService.getBoolValue(key: anyNamed('key')),
-        ).thenAnswer((_) async => true);
+        when(mockStorageService.getBoolValue(key: anyNamed('key')))
+            .thenAnswer((_) async => true);
 
         // act
         final result = await repository.readTheme();
@@ -39,9 +43,8 @@ void main() {
       test('should return SettingModel with isDarkTheme false '
           'when storage returns false', () async {
         // arrange
-        when(
-          mockStorageService.getBoolValue(key: anyNamed('key')),
-        ).thenAnswer((_) async => false);
+        when(mockStorageService.getBoolValue(key: anyNamed('key')))
+            .thenAnswer((_) async => false);
 
         // act
         final result = await repository.readTheme();
@@ -53,9 +56,8 @@ void main() {
       test('should return SettingModel with isDarkTheme false '
           'when storage returns null (key not set)', () async {
         // arrange
-        when(
-          mockStorageService.getBoolValue(key: anyNamed('key')),
-        ).thenAnswer((_) async => null);
+        when(mockStorageService.getBoolValue(key: anyNamed('key')))
+            .thenAnswer((_) async => null);
 
         // act
         final result = await repository.readTheme();
@@ -66,9 +68,8 @@ void main() {
 
       test('should throw Exception when storage throws', () async {
         // arrange
-        when(
-          mockStorageService.getBoolValue(key: anyNamed('key')),
-        ).thenThrow(Exception('Storage failure'));
+        when(mockStorageService.getBoolValue(key: anyNamed('key')))
+            .thenThrow(Exception('Storage failure'));
 
         // act & assert
         expect(
@@ -169,6 +170,34 @@ void main() {
 
         // act & assert
         await expectLater(repository.updateTheme(isDarkTheme: true), completes);
+      });
+    });
+    group('openUrl', () {
+      test('delegates url to urlLauncherService', () async {
+        // arrange
+        final url = Uri.parse('https://github.com/william-franco');
+        when(mockUrlLauncherService.openUrl(url: anyNamed('url')))
+            .thenAnswer((_) async {});
+
+        // act
+        await repository.openUrl(url: url);
+
+        // assert
+        verify(mockUrlLauncherService.openUrl(url: url)).called(1);
+      });
+
+      test('throws when urlLauncherService throws', () async {
+        // arrange
+        when(mockUrlLauncherService.openUrl(url: anyNamed('url')))
+            .thenThrow(Exception('Launch failure'));
+
+        // act & assert
+        expect(
+          () => repository.openUrl(
+            url: Uri.parse('https://github.com/william-franco'),
+          ),
+          throwsException,
+        );
       });
     });
   });

@@ -164,9 +164,8 @@ void main() {
         'should return ErrorResult when an unexpected exception is thrown',
         () async {
           // arrange
-          when(
-            mockConnectionService.checkConnection(),
-          ).thenThrow(Exception('Network failure'));
+          when(mockConnectionService.checkConnection())
+              .thenThrow(Exception('Network failure'));
 
           // act
           final result = await repository.findAllUsers();

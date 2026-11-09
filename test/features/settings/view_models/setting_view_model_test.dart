@@ -44,9 +44,8 @@ void main() {
       test('should emit SettingModel with isDarkTheme true '
           'when repository returns isDarkTheme true', () async {
         // arrange
-        when(
-          mockSettingRepository.readTheme(),
-        ).thenAnswer((_) async => SettingModel(isDarkTheme: true));
+        when(mockSettingRepository.readTheme())
+            .thenAnswer((_) async => SettingModel(isDarkTheme: true));
 
         final emittedStates = <SettingModel>[];
         viewModel.addListener(() => emittedStates.add(viewModel.state));
@@ -63,9 +62,8 @@ void main() {
       test('should emit SettingModel with isDarkTheme false '
           'when repository returns isDarkTheme false', () async {
         // arrange
-        when(
-          mockSettingRepository.readTheme(),
-        ).thenAnswer((_) async => SettingModel(isDarkTheme: false));
+        when(mockSettingRepository.readTheme())
+            .thenAnswer((_) async => SettingModel(isDarkTheme: false));
 
         final emittedStates = <SettingModel>[];
         viewModel.addListener(() => emittedStates.add(viewModel.state));
@@ -79,9 +77,8 @@ void main() {
 
       test('should notify listeners once when getTheme completes', () async {
         // arrange
-        when(
-          mockSettingRepository.readTheme(),
-        ).thenAnswer((_) async => SettingModel(isDarkTheme: true));
+        when(mockSettingRepository.readTheme())
+            .thenAnswer((_) async => SettingModel(isDarkTheme: true));
 
         int notifyCount = 0;
         viewModel.addListener(() => notifyCount++);
@@ -95,9 +92,8 @@ void main() {
 
       test('should propagate exception thrown by repository', () async {
         // arrange
-        when(
-          mockSettingRepository.readTheme(),
-        ).thenThrow(Exception('SettingRepository: Storage failure'));
+        when(mockSettingRepository.readTheme())
+            .thenThrow(Exception('SettingRepository: Storage failure'));
 
         // act & assert
         expect(() => viewModel.getTheme(), throwsA(isA<Exception>()));
@@ -157,9 +153,8 @@ void main() {
       test('should preserve other SettingModel fields when toggling theme '
           'via copyWith', () async {
         // arrange — simulate a prior state via getTheme
-        when(
-          mockSettingRepository.readTheme(),
-        ).thenAnswer((_) async => SettingModel(isDarkTheme: false));
+        when(mockSettingRepository.readTheme())
+            .thenAnswer((_) async => SettingModel(isDarkTheme: false));
         when(
           mockSettingRepository.updateTheme(
             isDarkTheme: anyNamed('isDarkTheme'),
@@ -223,32 +218,43 @@ void main() {
         },
       );
 
-      test(
-        'should reflect correct state after multiple sequential changeTheme calls',
-        () async {
-          // arrange
-          when(
-            mockSettingRepository.updateTheme(
-              isDarkTheme: anyNamed('isDarkTheme'),
-            ),
-          ).thenAnswer((_) async {
-            return;
-          });
+      test('should reflect correct state after multiple sequential changeTheme calls', () async {
+        // arrange
+        when(
+          mockSettingRepository.updateTheme(
+            isDarkTheme: anyNamed('isDarkTheme'),
+          ),
+        ).thenAnswer((_) async {
+          return;
+        });
 
-          // act
-          await viewModel.changeTheme(isDarkTheme: true);
-          expect(viewModel.state.isDarkTheme, isTrue);
+        // act
+        await viewModel.changeTheme(isDarkTheme: true);
+        expect(viewModel.state.isDarkTheme, isTrue);
 
-          await viewModel.changeTheme(isDarkTheme: false);
-          expect(viewModel.state.isDarkTheme, isFalse);
+        await viewModel.changeTheme(isDarkTheme: false);
+        expect(viewModel.state.isDarkTheme, isFalse);
 
-          verify(
-            mockSettingRepository.updateTheme(
-              isDarkTheme: anyNamed('isDarkTheme'),
-            ),
-          ).called(2);
-        },
-      );
+        verify(
+          mockSettingRepository.updateTheme(
+            isDarkTheme: anyNamed('isDarkTheme'),
+          ),
+        ).called(2);
+      });
+    });
+    group('openUrl', () {
+      test('delegates url to settingRepository', () async {
+        // arrange
+        final url = Uri.parse('https://github.com/william-franco');
+        when(mockSettingRepository.openUrl(url: anyNamed('url')))
+            .thenAnswer((_) async {});
+
+        // act
+        await viewModel.openUrl(url: url);
+
+        // assert
+        verify(mockSettingRepository.openUrl(url: url)).called(1);
+      });
     });
   });
 }

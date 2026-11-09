@@ -3,11 +3,14 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
+
 import 'dart:async' as _i4;
 
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:riverpod_mvvm_example/src/common/services/storage_service.dart'
     as _i3;
+import 'package:riverpod_mvvm_example/src/common/services/url_launcher_service.dart'
+    as _i6;
 import 'package:riverpod_mvvm_example/src/features/settings/models/setting_model.dart'
     as _i2;
 import 'package:riverpod_mvvm_example/src/features/settings/repositories/setting_repository.dart'
@@ -87,6 +90,13 @@ class MockSettingRepository extends _i1.Mock implements _i5.SettingRepository {
   }
 
   @override
+  _i4.Future<void> openUrl({required Uri? url}) => (super.noSuchMethod(
+    Invocation.method(#openUrl, [], {#url: url}),
+    returnValue: _i4.Future<void>.value(),
+    returnValueForMissingStub: _i4.Future<void>.value(),
+  ) as _i4.Future<void>);
+
+  @override
   _i4.Future<_i2.SettingModel> readTheme() => (super.noSuchMethod(
     Invocation.method(#readTheme, []),
     returnValue: _i4.Future<_i2.SettingModel>.value(
@@ -101,4 +111,21 @@ class MockSettingRepository extends _i1.Mock implements _i5.SettingRepository {
         returnValue: _i4.Future<void>.value(),
         returnValueForMissingStub: _i4.Future<void>.value(),
       ) as _i4.Future<void>);
+}
+
+/// A class which mocks [UrlLauncherService].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockUrlLauncherService extends _i1.Mock
+    implements _i6.UrlLauncherService {
+  MockUrlLauncherService() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i4.Future<void> openUrl({required Uri? url}) => (super.noSuchMethod(
+    Invocation.method(#openUrl, [], {#url: url}),
+    returnValue: _i4.Future<void>.value(),
+    returnValueForMissingStub: _i4.Future<void>.value(),
+  ) as _i4.Future<void>);
 }

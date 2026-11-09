@@ -3,12 +3,17 @@ import 'package:flutter_riverpod/legacy.dart';
 import 'package:riverpod_mvvm_example/src/common/services/connection_service.dart';
 import 'package:riverpod_mvvm_example/src/common/services/http_service.dart';
 import 'package:riverpod_mvvm_example/src/common/services/storage_service.dart';
+import 'package:riverpod_mvvm_example/src/common/services/url_launcher_service.dart';
 import 'package:riverpod_mvvm_example/src/features/settings/repositories/setting_repository.dart';
 import 'package:riverpod_mvvm_example/src/features/settings/view_models/setting_view_model.dart';
 import 'package:riverpod_mvvm_example/src/features/users/repositories/user_repository.dart';
 import 'package:riverpod_mvvm_example/src/features/users/view_models/user_view_model.dart';
 
 // Services
+final urlLauncherServiceProvider = Provider<UrlLauncherService>((ref) {
+  return UrlLauncherServiceImpl();
+});
+
 final connectionServiceProvider = Provider<ConnectionService>((ref) {
   return ConnectionServiceImpl();
 });
@@ -26,7 +31,10 @@ final settingRepositoryProvider = Provider.autoDispose<SettingRepository>((
   ref,
 ) {
   final storageService = ref.watch(storageServiceProvider);
-  return SettingRepositoryImpl(storageService: storageService);
+  return SettingRepositoryImpl(
+    storageService: storageService,
+    urlLauncherService: ref.watch(urlLauncherServiceProvider),
+  );
 });
 
 final userRepositoryProvider = Provider.autoDispose<UserRepository>((ref) {
