@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_mvvm_example/src/common/dependency_injectors/dependency_injector.dart';
 import 'package:riverpod_mvvm_example/src/common/routes/routes.dart';

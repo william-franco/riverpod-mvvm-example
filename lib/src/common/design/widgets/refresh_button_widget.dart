@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:riverpod_mvvm_example/src/common/extensions/platform_extension.dart';
 
 @protected
